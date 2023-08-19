@@ -6,9 +6,9 @@ import socket
 
 header = []
 parser = argparse.ArgumentParser(
-    prog='kraken client',
+    prog="kraken client",
     description="""parses input csv and sends
-    corresponding actions to a order book server."""
+    corresponding actions to a order book server.""",
 )
 parser.add_argument("filename")
 parser.add_argument("host")
@@ -17,7 +17,7 @@ parser.add_argument("port", type=int)
 
 def stream_data_to_server(file: Path, host: str, port: int):
     with open(file) as f:
-        reader = csv.reader(f, delimiter=',')
+        reader = csv.reader(f, delimiter=",")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         for row in reader:
             if len(row) > 0 and "#" not in row[0]:

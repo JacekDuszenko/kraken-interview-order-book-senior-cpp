@@ -1,32 +1,32 @@
 #ifndef ORDER_H_
 #define ORDER_H_
 
-#include<iostream>
+#include <iostream>
+#include <memory>
+
+#include "matching_engine.h"
 
 namespace kraken {
 
-enum OrderSide {
-  BID, ASK
-};
+enum OrderSide { BID, ASK };
 
 class Order {
- public:
+public:
   virtual std::string Stringified() = 0;
+  virtual std::string Execute(const std::unique_ptr<MatchingEngine>&) = 0;
+  virtual ~Order();
 };
 
 class NewOrder : public Order {
- public:
-  NewOrder(int user_id,
-           const std::string& ticker,
-           int price,
-           int quantity,
-           OrderSide side,
-           int user_order_id);
+public:
+  NewOrder(int user_id, const std::string &ticker, int price, int quantity,
+           OrderSide side, int user_order_id);
   std::string Stringified() override;
+  std::string Execute(const std::unique_ptr<MatchingEngine>&) override;
 
- private:
+private:
   int user_id_;
-  const std::string& ticker_;
+  const std::string &ticker_;
   int price_;
   int quantity_;
   OrderSide order_side_;
@@ -34,22 +34,23 @@ class NewOrder : public Order {
 };
 
 class CancelOrder : public Order {
- public:
+public:
   CancelOrder(int user_id, int user_order_id);
   std::string Stringified() override;
+  std::string Execute(const std::unique_ptr<MatchingEngine>&) override;
 
- private:
+private:
   int user_id_;
   int user_order_id_;
 };
 
 class FlushOrderbook : public Order {
- public:
+public:
   explicit FlushOrderbook() = default;
   std::string Stringified() override;
-
+  std::string Execute(const std::unique_ptr<MatchingEngine>&) override;
 };
 
-} // kraken
+} // namespace kraken
 
-#endif //ORDER_H_
+#endif // ORDER_H_

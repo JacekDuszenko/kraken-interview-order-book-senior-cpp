@@ -3,12 +3,13 @@ project(krakentask)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(
-        SOURCE_FILES
+set(SOURCE_FILES
+    csv_parser.cc csv_parser.h 
+    order.cc order.h
+    order_book.cc order_book.h
+    matching_engine.cc matching_engine.h)
 
-        csv_parser.cc csv_parser.h order.cc order.h)
-
-add_library(core ${SOURCE_FILES})
+add_library(core ${SOURCE_FILES} )
 target_include_directories(core
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
