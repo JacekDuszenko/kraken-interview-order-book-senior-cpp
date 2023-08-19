@@ -10,9 +10,8 @@ enum OrderSide {
 };
 
 class Order {
- protected:
-  std::string data_;
  public:
+  virtual std::string Stringified() = 0;
 };
 
 class NewOrder : public Order {
@@ -23,6 +22,7 @@ class NewOrder : public Order {
            int quantity,
            OrderSide side,
            int user_order_id);
+  std::string Stringified() override;
 
  private:
   int user_id_;
@@ -36,6 +36,8 @@ class NewOrder : public Order {
 class CancelOrder : public Order {
  public:
   CancelOrder(int user_id, int user_order_id);
+  std::string Stringified() override;
+
  private:
   int user_id_;
   int user_order_id_;
@@ -44,6 +46,8 @@ class CancelOrder : public Order {
 class FlushOrderbook : public Order {
  public:
   explicit FlushOrderbook() = default;
+  std::string Stringified() override;
+
 };
 
 } // kraken

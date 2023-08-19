@@ -4,6 +4,7 @@
 #include "order.h"
 namespace kraken {
 class CsvParser {
+ public:
   Order* Parse(const std::string& csv_data);
 };
 } // namespace kraken

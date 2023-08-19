@@ -35,11 +35,10 @@ void ExitWithError(const std::string& msg) {
 
 kraken::Order* kraken::CsvParser::Parse(const std::string& csv_data) {
   char type = csv_data[0];
-  std::string data = csv_data.substr(2); // Skip the type and comma
-  auto split_data = split(data, ",");
 
   switch (type) {
     case 'N': {
+      auto split_data = split(csv_data.substr(2), ",");
       int user_id = std::stoi(split_data[0]);
       std::string ticker = split_data[1];
       int price = std::stoi(split_data[2]);
@@ -57,13 +56,14 @@ kraken::Order* kraken::CsvParser::Parse(const std::string& csv_data) {
                           side.value(),
                           user_order_id);
     }
-    case 'F': {
-      return new FlushOrderbook();
-    }
     case 'C': {
+      auto split_data = split(csv_data.substr(2), ",");
       int user_id = std::stoi(split_data[0]);
       int user_order_id = std::stoi(split_data[1]);
       return new CancelOrder(user_id, user_order_id);
+    }
+    case 'F': {
+      return new FlushOrderbook();
     }
     default: {
       ExitWithError("invalid data");
