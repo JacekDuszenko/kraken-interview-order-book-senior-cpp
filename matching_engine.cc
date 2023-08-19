@@ -1,5 +1,8 @@
 #include "matching_engine.h"
+#include "order_book.h"
+#include <unordered_map>
 #include<string>
+#include <memory>
 
 
 std::shared_ptr<kraken::OrderBook> kraken::MatchingEngine::GetOrderBookByTicker(const std::string &ticker) {
@@ -10,9 +13,19 @@ std::shared_ptr<kraken::OrderBook> kraken::MatchingEngine::GetOrderBookByTicker(
 }
 
 kraken::MatchingEngine::MatchingEngine(
-        std::unordered_map<std::string, std::shared_ptr<kraken::OrderBook>> &order_books) : order_books_(order_books) {}
+        std::unordered_map<std::string, std::shared_ptr<kraken::OrderBook> > &order_books) : order_books_(
+        order_books) {}
 
-std::shared_ptr<kraken::OrderBook> kraken::MatchingEngine::Flush() {
+void kraken::MatchingEngine::Flush() {
     order_books_.clear();
 }
+
+void kraken::MatchingEngine::IndexTickerByOrderId(int user_id, int order_id, const std::string &ticker) {
+    order_to_ticker[std::to_string(user_id) + "#" + std::to_string(order_id)] = ticker;
+}
+
+std::string kraken::MatchingEngine::GetTickerByOrderId(int user_id, int order_id) {
+    return order_to_ticker[std::to_string(user_id) + "#" + std::to_string(order_id)];
+}
+
 

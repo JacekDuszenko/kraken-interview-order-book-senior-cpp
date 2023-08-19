@@ -49,7 +49,9 @@ int main() {
         auto order =
                 std::unique_ptr<kraken::Order>(csv_parser.Parse(received_data));
         auto execution_results = order->Execute(matching_engine_ptr);
-        std::cout << execution_results;
+        for (const auto& elem: execution_results) {
+            std::cout << elem << std::endl;
+        }
     }
 
     // Close the socket

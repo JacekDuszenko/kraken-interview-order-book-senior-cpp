@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.27.3)
 project(krakentask)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_COMPILER ${CPP_COMPILER})
 
 set(SOURCE_FILES
     csv_parser.cc csv_parser.h 
