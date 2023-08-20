@@ -44,7 +44,7 @@ kraken::NewOrder::Execute(const std::unique_ptr<MatchingEngine> &engine) {
 void kraken::NewOrder::AddOrder(std::shared_ptr<kraken::OrderBook> &order_book, std::vector<std::string> &logs) const {
     std::string top_of_book_change;
     if (BID == order_side_) {
-        top_of_book_change = order_book->AddBid(OrderMetadata(user_order_id_, user_id_, price_, quantity_, ++counter));
+        top_of_book_change = order_book->AddBid(OrderMetadata(user_order_id_, user_id_, price_ == 0 ? INT_MAX : price_, quantity_, ++counter));
     } else if (ASK == order_side_) {
         top_of_book_change = order_book->AddAsk(OrderMetadata(user_order_id_, user_id_, price_, quantity_, ++counter));
     }

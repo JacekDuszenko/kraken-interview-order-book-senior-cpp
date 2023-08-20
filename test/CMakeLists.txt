@@ -14,11 +14,13 @@ add_executable(
     unit_tests
     csv_parser_test.cc
         matching_engine_test.cc
+        order_book_test.cc
 )
 
 target_link_libraries(unit_tests
   PRIVATE
     core
+    gtest
     gtest_main
   )
 

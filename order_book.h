@@ -49,6 +49,8 @@ namespace kraken {
     private:
         std::set<OrderMetadata, decltype(bid_comparator)> bids;
         std::set<OrderMetadata, decltype(ask_comparator)> asks;
+
+        bool IsOrderExecutionPossible();
     };
 } // namespace kraken
 

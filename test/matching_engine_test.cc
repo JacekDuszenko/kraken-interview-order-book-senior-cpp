@@ -1,6 +1,5 @@
 
 #include <gtest/gtest.h>
-#include <iostream>
 #include "matching_engine.h"
 #include "order_book.h"
 #include "order.h"
@@ -11,6 +10,6 @@ TEST(MatchingEngine, FlushOrderbook) {
 
     auto execution_results = kraken::FlushOrderbook().Execute(matching_engine_ptr);
 
-    ASSERT_EQ(execution_results, "flushed");
-    ASSERT_TRUE(order_books.empty())
+    ASSERT_TRUE(execution_results.empty());
+    ASSERT_TRUE(order_books.empty());
 }
