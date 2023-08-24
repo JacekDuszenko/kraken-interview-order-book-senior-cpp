@@ -19,7 +19,7 @@ namespace kraken {
 
         void Flush();
 
-        void IndexTickerByOrderId(int user_id, int order_id, const std::string& ticker);
+        void IndexTickerByOrderId(int user_id, int order_id, const std::string &ticker);
 
         std::string GetTickerByOrderId(int user_id, int order_id);
 

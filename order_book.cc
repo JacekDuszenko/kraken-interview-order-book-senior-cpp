@@ -2,6 +2,8 @@
 #include "order_book.h"
 #include <string>
 #include<stdexcept>
+#include<climits>
+
 
 kraken::OrderBook::OrderBook() = default;
 
@@ -87,7 +89,7 @@ std::string GetFormattedTransaction(kraken::OrderMetadata bid, kraken::OrderMeta
 
 }
 
-void update_asks_top_of_book(std::set<kraken::OrderMetadata, decltype(kraken::ask_comparator)> asks,
+void update_asks_top_of_book(std::set<kraken::OrderMetadata, kraken::AskComparator> asks,
                              std::vector<std::string> &results) {
     if (asks.empty()) {
         results.emplace_back("B, S, -, -");
@@ -98,7 +100,7 @@ void update_asks_top_of_book(std::set<kraken::OrderMetadata, decltype(kraken::as
     }
 }
 
-void update_bids_top_of_book(std::set<kraken::OrderMetadata, decltype(kraken::bid_comparator)> bids,
+void update_bids_top_of_book(std::set<kraken::OrderMetadata, kraken::BidComparator> bids,
                              std::vector<std::string> &results) {
     if (bids.empty()) {
         results.emplace_back("B, B, -, -");

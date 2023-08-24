@@ -203,3 +203,183 @@ TEST(OrderBook, BalancedBookCancelBehindBestBid) {
     }));
 }
 
+
+TEST(OrderBook, EvenInput_1) {
+    auto res = RunOrderBook({
+                                    "N,1,AAPL,10,100,B,1",
+                                    "N,1,AAPL,12,100,S,2",
+                                    "N,2,AAPL,11,100,S,102",
+                                    "N,2,AAPL,10,100,S,103",
+                                    "N,1,AAPL,10,100,B,3",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "A, 2, 103",
+            "T, 1, 1, 2, 103, 10, 100",
+            "B, B, -, -",
+            "A, 1, 3",
+            "B, B, 10, 100"
+    }));
+}
+
+TEST(OrderBook, EvenInput_2) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "N,2,IBM,9,100,S,103",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "A, 2, 103",
+            "T, 1, 1, 2, 103, 10, 100",
+            "B, B, 9, 100"
+    }));
+}
+
+TEST(OrderBook, EvenInput_3) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "N,2,IBM,0,100,S,103",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "A, 2, 103",
+            "T, 1, 1, 2, 103, 10, 100",
+            "B, B, 9, 100"
+    }));
+}
+
+TEST(OrderBook, EvenInput_4) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,16,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,15,100,S,102",
+                                    "N,2,IBM,11,100,B,103",
+                                    "N,1,IBM,14,100,S,3",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 16, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 15, 100",
+            "A, 2, 103",
+            "B, B, 11, 100",
+            "A, 1, 3",
+            "B, S, 14, 100"
+    }));
+}
+
+TEST(OrderBook, EvenInput_5) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "N,1,IBM,0,20,B,3",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "A, 1, 3",
+            "T, 1, 3, 2, 102, 11, 20",
+            "B, S, 11, 80"
+    }));
+}
+
+TEST(OrderBook, EvenInput_6) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "N,1,IBM,11,20,B,3",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "A, 1, 3",
+            "T, 1, 3, 2, 102, 11, 20",
+            "B, S, 11, 80"
+    }));
+}
+
+TEST(OrderBook, EvenInput_7) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "C,1,1",
+                                    "C,2,102",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "C, 1, 1",
+            "C, 2, 102"
+    }));
+}
+
+TEST(OrderBook, EvenInput_8) {
+    auto res = RunOrderBook({
+                                    "N,1,IBM,10,100,B,1",
+                                    "N,1,IBM,12,100,S,2",
+                                    "N,2,IBM,9,100,B,101",
+                                    "N,2,IBM,11,100,S,102",
+                                    "C,1,1",
+                                    "C,2,101",
+                                    "F",
+                            });
+    EXPECT_EQ(res, (std::vector<std::string>{
+            "A, 1, 1",
+            "B, B, 10, 100",
+            "A, 1, 2",
+            "B, S, 12, 100",
+            "A, 2, 101",
+            "A, 2, 102",
+            "B, S, 11, 100",
+            "C, 1, 1",
+            "C, 2, 101"
+    }));
+}

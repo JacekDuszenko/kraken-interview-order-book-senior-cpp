@@ -24,7 +24,7 @@ namespace kraken {
 
     class NewOrder : public Order {
     public:
-        NewOrder(int user_id, const std::string &ticker, int price, int quantity,
+        NewOrder(int user_id, const std::string ticker, int price, int quantity,
                  OrderSide side, int user_order_id);
 
         std::string Stringified() override;
@@ -33,7 +33,7 @@ namespace kraken {
 
     private:
         int user_id_;
-        const std::string &ticker_;
+        const std::string ticker_;
         int price_;
         int quantity_;
         OrderSide order_side_;

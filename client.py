@@ -22,7 +22,6 @@ def stream_data_to_server(file: Path, host: str, port: int):
         for row in reader:
             if len(row) > 0 and "#" not in row[0]:
                 data = ",".join(list(map(lambda s: s.strip(), row)))
-                print(data)
                 sock.sendto(bytes(data, "utf-8"), (host, port))
 
 

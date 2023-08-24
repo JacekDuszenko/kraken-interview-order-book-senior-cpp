@@ -1,18 +1,23 @@
 #include "order.h"
 #include <iostream>
+#include<climits>
+#include <sstream>
 
-kraken::NewOrder::NewOrder(int user_id, const std::string &ticker, int price,
+
+kraken::NewOrder::NewOrder(int user_id, const std::string ticker, int price,
                            int quantity, kraken::OrderSide side,
                            int user_order_id)
         : user_id_(user_id), ticker_(ticker), price_(price), quantity_(quantity),
           order_side_(side), user_order_id_(user_order_id) {}
 
 std::string kraken::NewOrder::Stringified() {
-    return "NewOrder[user_id: " + std::to_string(user_id_) +
-           ", ticker: " + ticker_ + ", price: " + std::to_string(price_) +
-           ", quantity: " + std::to_string(quantity_) +
-           ", order_side: " + (order_side_ == OrderSide::ASK ? "ASK" : "BID") +
-           ", user_order_id: " + std::to_string(user_order_id_) + "]";
+    std::stringstream stream;
+    stream << "NewOrder[user_id: " << user_id_ <<
+           ", ticker: " << ticker_ << ", price: " << price_ <<
+           ", quantity: " << quantity_ <<
+           ", order_side: " << (order_side_ == OrderSide::ASK ? "ASK" : "BID") <<
+           ", user_order_id: " << user_order_id_ << "]";
+    return stream.str();
 }
 
 std::string kraken::CancelOrder::Stringified() {
@@ -44,7 +49,8 @@ kraken::NewOrder::Execute(const std::unique_ptr<MatchingEngine> &engine) {
 void kraken::NewOrder::AddOrder(std::shared_ptr<kraken::OrderBook> &order_book, std::vector<std::string> &logs) const {
     std::string top_of_book_change;
     if (BID == order_side_) {
-        top_of_book_change = order_book->AddBid(OrderMetadata(user_order_id_, user_id_, price_ == 0 ? INT_MAX : price_, quantity_, ++counter));
+        top_of_book_change = order_book->AddBid(
+                OrderMetadata(user_order_id_, user_id_, price_ == 0 ? INT_MAX : price_, quantity_, ++counter));
     } else if (ASK == order_side_) {
         top_of_book_change = order_book->AddAsk(OrderMetadata(user_order_id_, user_id_, price_, quantity_, ++counter));
     }

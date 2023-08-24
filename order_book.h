@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include<set>
+#include<string>
 
 namespace kraken {
 
@@ -21,17 +22,21 @@ namespace kraken {
         bool operator!=(const OrderMetadata &rhs) const;
     };
 
-    auto bid_comparator = [](OrderMetadata a, OrderMetadata b) {
-        if (a.price != b.price) {
-            return b.price < a.price;
+    struct BidComparator {
+        bool operator()(const OrderMetadata& a, const OrderMetadata& b) const {
+            if (a.price != b.price) {
+                return b.price < a.price;
+            }
+            return a.arrived_at < b.arrived_at;
         }
-        return a.arrived_at < b.arrived_at;
     };
-    auto ask_comparator = [](OrderMetadata a, OrderMetadata b) {
-        if (a.price != b.price) {
-            return a.price < b.price;
+    struct AskComparator {
+        bool operator()(const OrderMetadata& a, const OrderMetadata& b) const {
+            if (a.price != b.price) {
+                return a.price < b.price;
+            }
+            return a.arrived_at < b.arrived_at;
         }
-        return a.arrived_at < b.arrived_at;
     };
 
     class OrderBook {
@@ -47,8 +52,8 @@ namespace kraken {
         std::vector<std::string> SettleTransactions();
 
     private:
-        std::set<OrderMetadata, decltype(bid_comparator)> bids;
-        std::set<OrderMetadata, decltype(ask_comparator)> asks;
+        std::set<OrderMetadata, BidComparator> bids;
+        std::set<OrderMetadata, AskComparator> asks;
 
         bool IsOrderExecutionPossible();
     };
